@@ -5,6 +5,10 @@ let currentCall = null;
 let isMuted = false;
 let isVideoOff = false;
 let currentUserName = '';
+let connectionTimeout;
+let connectionAttempts = 0;
+const MAX_CONNECTION_ATTEMPTS = 3;
+const CONNECTION_TIMEOUT = 30000; // 30 seconds
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
@@ -144,6 +148,91 @@ socket.on('user-list', (users) => {
   });
 });
 
+// Helper function to handle connection state changes
+function handleConnectionStateChange(peerConnection, callerName = '') {
+  const state = peerConnection.connectionState;
+  console.log(`Connection state changed to: ${state}${callerName ? ` (${callerName})` : ''}`);
+  
+  switch (state) {
+    case 'new':
+      console.log('Connection is new - waiting for ICE gathering');
+      break;
+      
+    case 'connecting':
+      console.log('Connection is connecting - ICE negotiation in progress');
+      // Clear any existing timeout and set a new one
+      if (connectionTimeout) {
+        clearTimeout(connectionTimeout);
+      }
+      connectionTimeout = setTimeout(() => {
+        console.log('Connection timeout - attempting to reconnect');
+        if (connectionAttempts < MAX_CONNECTION_ATTEMPTS) {
+          connectionAttempts++;
+          console.log(`Connection attempt ${connectionAttempts}/${MAX_CONNECTION_ATTEMPTS}`);
+          // Don't end call immediately, let it try to recover
+        } else {
+          console.log('Max connection attempts reached - ending call');
+          alert('Connection failed after multiple attempts. Please try again.');
+          endCall();
+        }
+      }, CONNECTION_TIMEOUT);
+      break;
+      
+    case 'connected':
+      console.log('Connection established successfully!');
+      // Clear timeout and reset attempts on successful connection
+      if (connectionTimeout) {
+        clearTimeout(connectionTimeout);
+        connectionTimeout = null;
+      }
+      connectionAttempts = 0;
+      break;
+      
+    case 'disconnected':
+      console.log('Connection disconnected - attempting to reconnect');
+      // Don't immediately end call, give it time to reconnect
+      if (connectionTimeout) {
+        clearTimeout(connectionTimeout);
+      }
+      connectionTimeout = setTimeout(() => {
+        console.log('Reconnection timeout - ending call');
+        alert('Connection lost and could not be restored.');
+        endCall();
+      }, 10000); // 10 seconds to reconnect
+      break;
+      
+    case 'failed':
+      console.log('Connection failed');
+      if (connectionAttempts < MAX_CONNECTION_ATTEMPTS) {
+        connectionAttempts++;
+        console.log(`Connection failed, attempt ${connectionAttempts}/${MAX_CONNECTION_ATTEMPTS}`);
+        // Try to restart ICE
+        try {
+          peerConnection.restartIce();
+          console.log('ICE restart initiated');
+        } catch (error) {
+          console.error('Failed to restart ICE:', error);
+          alert('Connection failed. Please try again.');
+          endCall();
+        }
+      } else {
+        console.log('Max connection attempts reached - ending call');
+        alert('Connection failed after multiple attempts. Please check your network and try again.');
+        endCall();
+      }
+      break;
+      
+    case 'closed':
+      console.log('Connection closed');
+      if (connectionTimeout) {
+        clearTimeout(connectionTimeout);
+        connectionTimeout = null;
+      }
+      connectionAttempts = 0;
+      break;
+  }
+}
+
 async function startCall(userId, userName) {
   console.log(`startCall called with userId: ${userId}, userName: ${userName}`);
   
@@ -161,13 +250,18 @@ async function startCall(userId, userName) {
 
   console.log(`Starting call to ${userName} (${userId})`);
   currentCall = userId;
+  connectionAttempts = 0; // Reset connection attempts
   
   // Create peer connection
   peerConnection = new RTCPeerConnection({
     iceServers: [
       { urls: 'stun:stun.l.google.com:19302' },
-      { urls: 'stun:stun1.l.google.com:19302' }
-    ]
+      { urls: 'stun:stun1.l.google.com:19302' },
+      { urls: 'stun:stun2.l.google.com:19302' },
+      { urls: 'stun:stun3.l.google.com:19302' },
+      { urls: 'stun:stun4.l.google.com:19302' }
+    ],
+    iceCandidatePoolSize: 10
   });
 
   // Add local stream tracks
@@ -192,13 +286,22 @@ async function startCall(userId, userName) {
     }
   };
 
-  // Handle connection state changes
-  peerConnection.onconnectionstatechange = () => {
-    console.log('Connection state:', peerConnection.connectionState);
-    if (peerConnection.connectionState === 'failed' || 
-        peerConnection.connectionState === 'disconnected') {
-      endCall();
+  // Handle ICE connection state changes
+  peerConnection.oniceconnectionstatechange = () => {
+    console.log('ICE connection state:', peerConnection.iceConnectionState);
+    if (peerConnection.iceConnectionState === 'failed') {
+      console.log('ICE connection failed - attempting restart');
+      try {
+        peerConnection.restartIce();
+      } catch (error) {
+        console.error('Failed to restart ICE:', error);
+      }
     }
+  };
+
+  // Handle connection state changes with improved logic
+  peerConnection.onconnectionstatechange = () => {
+    handleConnectionStateChange(peerConnection, userName);
   };
 
   try {
@@ -234,13 +337,18 @@ socket.on('call-made', async ({ from, fromName, offer }) => {
 
   if (confirm(`${fromName} is calling you. Accept?`)) {
     currentCall = from;
+    connectionAttempts = 0; // Reset connection attempts
     
     // Create peer connection
     peerConnection = new RTCPeerConnection({
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
-      ]
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
+        { urls: 'stun:stun3.l.google.com:19302' },
+        { urls: 'stun:stun4.l.google.com:19302' }
+      ],
+      iceCandidatePoolSize: 10
     });
 
     // Add local stream tracks
@@ -263,13 +371,22 @@ socket.on('call-made', async ({ from, fromName, offer }) => {
       }
     };
 
-    // Handle connection state changes
-    peerConnection.onconnectionstatechange = () => {
-      console.log('Connection state:', peerConnection.connectionState);
-      if (peerConnection.connectionState === 'failed' || 
-          peerConnection.connectionState === 'disconnected') {
-        endCall();
+    // Handle ICE connection state changes
+    peerConnection.oniceconnectionstatechange = () => {
+      console.log('ICE connection state:', peerConnection.iceConnectionState);
+      if (peerConnection.iceConnectionState === 'failed') {
+        console.log('ICE connection failed - attempting restart');
+        try {
+          peerConnection.restartIce();
+        } catch (error) {
+          console.error('Failed to restart ICE:', error);
+        }
       }
+    };
+
+    // Handle connection state changes with improved logic
+    peerConnection.onconnectionstatechange = () => {
+      handleConnectionStateChange(peerConnection, fromName);
     };
 
     try {
@@ -323,6 +440,15 @@ socket.on('call-ended', ({ from }) => {
 });
 
 function endCall() {
+  // Clear any pending timeouts
+  if (connectionTimeout) {
+    clearTimeout(connectionTimeout);
+    connectionTimeout = null;
+  }
+  
+  // Reset connection attempts
+  connectionAttempts = 0;
+  
   if (peerConnection) {
     peerConnection.close();
     peerConnection = null;
