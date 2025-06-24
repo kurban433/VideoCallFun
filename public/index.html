@@ -88,7 +88,7 @@
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -159,6 +159,94 @@
     </div>
    
   </div>
+  <script src="js/main.js"></script>
+</body>
+
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Call App</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="screen">
+      <div class="welcome-content">
+        <h1>🎥 Video Call App</h1>
+        <p>Enter your name to start making video calls</p>
+        <div class="input-group">
+          <input type="text" id="nameInput" placeholder="Your name" required>
+          <button onclick="registerUser()" class="btn-primary">Start</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="mainScreen" class="screen hidden">
+      <div class="header">
+        <h2>Video Call App</h2>
+        <div class="user-info">
+          <span id="currentUserName"></span>
+          <button onclick="disconnect()" class="btn-secondary">Disconnect</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="users-panel">
+          <h3>Online Users</h3>
+          <div id="userList" class="user-list"></div>
+        </div>
+
+        <div class="video-panel">
+          <div id="videoContainer" class="video-container hidden">
+            <div class="video-grid">
+              <div class="video-wrapper">
+                <video id="remoteVideo" autoplay playsinline></video>
+                <div class="video-label">Remote</div>
+              </div>
+              <div class="video-wrapper local">
+                <video id="localVideo" autoplay muted playsinline></video>
+                <div class="video-label">You</div>
+              </div>
+            </div>
+            
+            <div class="call-controls">
+              <button onclick="toggleMute()" id="muteButton" class="control-btn">
+                <span class="icon">🔊</span>
+                <span class="label">Mute</span>
+              </button>
+              <button onclick="toggleVideo()" id="videoButton" class="control-btn">
+                <span class="icon">📹</span>
+                <span class="label">Video</span>
+              </button>
+              <button onclick="endCall()" class="control-btn end-call">
+                <span class="icon">❌</span>
+                <span class="label">End Call</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="noCallMessage" class="no-call-message">
+            <div class="message-content">
+              <h3>Ready to make a call?</h3>
+              <p>Select a user from the list to start a video call</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
 </body>
 
