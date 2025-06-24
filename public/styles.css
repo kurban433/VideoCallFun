@@ -333,6 +333,84 @@ body {
   font-size: 1.1rem;
 }
 
+/* Connection Status */
+.connection-status {
+  background: #f7fafc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+  border-left: 4px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.status-connected {
+  background: #f0fff4;
+  border-left-color: #48bb78;
+  color: #22543d;
+}
+
+.status-connecting {
+  background: #fffbeb;
+  border-left-color: #ed8936;
+  color: #744210;
+}
+
+.status-disconnected {
+  background: #f7fafc;
+  border-left-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.status-failed {
+  background: #fed7d7;
+  border-left-color: #f56565;
+  color: #742a2a;
+}
+
+.status-error {
+  background: #fed7d7;
+  border-left-color: #f56565;
+  color: #742a2a;
+}
+
+.status-ice-checking {
+  background: #fffbeb;
+  border-left-color: #ed8936;
+  color: #744210;
+}
+
+.status-ice-connected {
+  background: #f0fff4;
+  border-left-color: #48bb78;
+  color: #22543d;
+}
+
+.status-ice-failed {
+  background: #fed7d7;
+  border-left-color: #f56565;
+  color: #742a2a;
+}
+
+.status-peer-connecting {
+  background: #fffbeb;
+  border-left-color: #ed8936;
+  color: #744210;
+}
+
+.status-peer-connected {
+  background: #f0fff4;
+  border-left-color: #48bb78;
+  color: #22543d;
+}
+
+.status-peer-failed {
+  background: #fed7d7;
+  border-left-color: #f56565;
+  color: #742a2a;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .content {
