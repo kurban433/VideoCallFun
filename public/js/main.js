@@ -1,4 +1,16 @@
-const socket = io();
+// Detect environment and set up Socket.IO connection
+const isLocalhost = window.location.hostname === 'localhost' || 
+                   window.location.hostname === '127.0.0.1' ||
+                   window.location.hostname === '';
+
+const socket = isLocalhost 
+  ? io() 
+  : io(window.location.origin, {
+      transports: ['websocket', 'polling'],
+      upgrade: true,
+      rememberUpgrade: true
+    });
+
 let localStream;
 let peerConnection;
 let currentCall = null;
