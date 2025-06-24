@@ -258,6 +258,7 @@ body {
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .call-controls {
@@ -265,7 +266,6 @@ body {
   justify-content: center;
   gap: 15px;
   padding: 20px 0;
-  border-top: 1px solid #e2e8f0;
 }
 
 .control-btn {
@@ -310,16 +310,15 @@ body {
   color: #c53030;
 }
 
-/* No Call Message */
 .no-call-message {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
 .message-content {
-  text-align: center;
   color: #718096;
 }
 
@@ -330,131 +329,717 @@ body {
 }
 
 .message-content p {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
-/* Connection Status */
 .connection-status {
-  background: #f7fafc;
-  padding: 8px 12px;
-  border-radius: 6px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  border-radius: 8px;
   font-size: 0.9rem;
-  font-weight: 500;
-  margin-bottom: 15px;
-  border-left: 4px solid #e2e8f0;
+  font-weight: 600;
+  z-index: 1000;
   transition: all 0.3s ease;
 }
 
 .status-connected {
-  background: #f0fff4;
-  border-left-color: #48bb78;
+  background: #c6f6d5;
   color: #22543d;
 }
 
 .status-connecting {
-  background: #fffbeb;
-  border-left-color: #ed8936;
+  background: #fef5e7;
   color: #744210;
 }
 
 .status-disconnected {
-  background: #f7fafc;
-  border-left-color: #e2e8f0;
-  color: #4a5568;
+  background: #fed7d7;
+  color: #c53030;
 }
 
 .status-failed {
   background: #fed7d7;
-  border-left-color: #f56565;
-  color: #742a2a;
+  color: #c53030;
 }
 
 .status-error {
   background: #fed7d7;
-  border-left-color: #f56565;
-  color: #742a2a;
+  color: #c53030;
 }
 
 .status-ice-checking {
-  background: #fffbeb;
-  border-left-color: #ed8936;
+  background: #fef5e7;
   color: #744210;
 }
 
 .status-ice-connected {
-  background: #f0fff4;
-  border-left-color: #48bb78;
+  background: #c6f6d5;
   color: #22543d;
 }
 
 .status-ice-failed {
   background: #fed7d7;
-  border-left-color: #f56565;
-  color: #742a2a;
+  color: #c53030;
 }
 
 .status-peer-connecting {
-  background: #fffbeb;
-  border-left-color: #ed8936;
+  background: #fef5e7;
   color: #744210;
 }
 
 .status-peer-connected {
-  background: #f0fff4;
-  border-left-color: #48bb78;
+  background: #c6f6d5;
   color: #22543d;
 }
 
 .status-peer-failed {
   background: #fed7d7;
-  border-left-color: #f56565;
-  color: #742a2a;
+  color: #c53030;
 }
 
-/* Responsive Design */
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .content {
+    grid-template-columns: 250px 1fr;
+    gap: 15px;
+  }
+  
+  .video-grid {
+    grid-template-columns: 1fr 180px;
+    gap: 15px;
+  }
+  
+  .header {
+    padding: 15px;
+  }
+  
+  .header h2 {
+    font-size: 1.6rem;
+  }
+  
+  .users-panel {
+    padding: 15px;
+  }
+  
+  .video-panel {
+    padding: 15px;
+  }
+}
+
 @media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
   .content {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
   
   .video-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
   
   .video-wrapper.local {
     aspect-ratio: 16/9;
+    max-width: 300px;
+    margin: 0 auto;
   }
   
   .header {
     flex-direction: column;
     gap: 15px;
     text-align: center;
+    padding: 15px;
+  }
+  
+  .header h2 {
+    font-size: 1.4rem;
+  }
+  
+  .user-info {
+    flex-direction: column;
+    gap: 10px;
   }
   
   .call-controls {
     flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px 0;
   }
   
   .control-btn {
     min-width: 70px;
-    padding: 12px;
+    padding: 12px 8px;
   }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 10px;
+  
+  .control-btn .icon {
+    font-size: 1.3rem;
+  }
+  
+  .control-btn .label {
+    font-size: 0.7rem;
+  }
+  
+  .users-panel {
+    order: 2;
+  }
+  
+  .video-panel {
+    order: 1;
+    min-height: 400px;
   }
   
   .welcome-content {
     padding: 30px 20px;
+    margin: 0 10px;
   }
   
   .welcome-content h1 {
     font-size: 2rem;
   }
   
+  .welcome-content p {
+    font-size: 1rem;
+  }
+  
+  .connection-status {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 5px;
+  }
+  
+  .welcome-content {
+    padding: 25px 15px;
+    margin: 0 5px;
+  }
+  
+  .welcome-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .welcome-content p {
+    font-size: 0.9rem;
+  }
+  
+  .header {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
   .header h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+  }
+  
+  .users-panel {
+    padding: 12px;
+  }
+  
+  .users-panel h3 {
+    font-size: 1.1rem;
+  }
+  
+  .video-panel {
+    padding: 12px;
+    min-height: 350px;
+  }
+  
+  .video-wrapper {
+    border-radius: 10px;
+  }
+  
+  .video-wrapper.local {
+    max-width: 250px;
+  }
+  
+  .call-controls {
+    gap: 8px;
+    padding: 12px 0;
+  }
+  
+  .control-btn {
+    min-width: 60px;
+    padding: 10px 6px;
+  }
+  
+  .control-btn .icon {
+    font-size: 1.2rem;
+  }
+  
+  .control-btn .label {
+    font-size: 0.65rem;
+  }
+  
+  .user-item {
+    padding: 10px;
+  }
+  
+  .user-item .user-name {
+    font-size: 0.9rem;
+  }
+  
+  .call-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .input-group input {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .btn-primary {
+    padding: 12px 25px;
+    font-size: 0.9rem;
+  }
+  
+  .btn-secondary {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .welcome-content h1 {
+    font-size: 1.6rem;
+  }
+  
+  .header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .control-btn {
+    min-width: 55px;
+    padding: 8px 4px;
+  }
+  
+  .control-btn .icon {
+    font-size: 1.1rem;
+  }
+  
+  .control-btn .label {
+    font-size: 0.6rem;
+  }
+  
+  .video-wrapper.local {
+    max-width: 200px;
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .container {
+    padding: 10px;
+  }
+  
+  .content {
+    grid-template-columns: 200px 1fr;
+    gap: 10px;
+  }
+  
+  .video-grid {
+    grid-template-columns: 1fr 150px;
+    gap: 10px;
+  }
+  
+  .video-wrapper.local {
+    max-width: none;
+    aspect-ratio: 4/3;
+  }
+  
+  .header {
+    flex-direction: row;
+    text-align: left;
+    padding: 10px;
+  }
+  
+  .header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .user-info {
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .users-panel {
+    order: 1;
+    padding: 10px;
+  }
+  
+  .video-panel {
+    order: 2;
+    padding: 10px;
+    min-height: 300px;
+  }
+  
+  .call-controls {
+    padding: 10px 0;
+  }
+  
+  .control-btn {
+    min-width: 60px;
+    padding: 8px 6px;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .video-wrapper video {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .btn-primary:hover,
+  .control-btn:hover {
+    transform: none;
+  }
+}
+
+/* Mobile-specific enhancements */
+.mobile-device .video-wrapper {
+  border-radius: 8px;
+}
+
+.mobile-device .control-btn {
+  min-height: 44px; /* iOS minimum touch target */
+  min-width: 44px;
+}
+
+.mobile-device .call-btn {
+  min-height: 36px;
+  min-width: 60px;
+}
+
+.mobile-device .btn-primary,
+.mobile-device .btn-secondary {
+  min-height: 44px;
+}
+
+.touch-device button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.touch-device button:active {
+  transform: scale(0.95);
+}
+
+.touch-device .video-wrapper {
+  cursor: pointer;
+}
+
+.touch-device .video-wrapper:active {
+  transform: scale(0.98);
+}
+
+/* Improved focus states for accessibility */
+button:focus,
+input:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Better contrast for mobile */
+@media (max-width: 768px) {
+  .video-label {
+    background: rgba(0, 0, 0, 0.8);
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+  
+  .connection-status {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    color: #e2e8f0;
+  }
+  
+  .welcome-content,
+  .header,
+  .users-panel,
+  .video-panel {
+    background: #2d3748;
+    color: #e2e8f0;
+  }
+  
+  .welcome-content h1,
+  .header h2,
+  .users-panel h3 {
+    color: #f7fafc;
+  }
+  
+  .welcome-content p,
+  .message-content {
+    color: #a0aec0;
+  }
+  
+  .input-group input {
+    background: #4a5568;
+    border-color: #718096;
+    color: #e2e8f0;
+  }
+  
+  .input-group input:focus {
+    border-color: #667eea;
+  }
+  
+  .user-item {
+    background: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .user-item .user-name {
+    color: #f7fafc;
+  }
+  
+  .control-btn {
+    background: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .control-btn:hover {
+    background: #718096;
+  }
+  
+  .btn-secondary {
+    background: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .btn-secondary:hover {
+    background: #718096;
   }
 } 
+
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.header, .users-panel, .video-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #667eea;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+}
+
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.video-wrapper {
+  position: relative;
+  background: black;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-label {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+
+.call-controls {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #f7fafc;
+  cursor: pointer;
+}
+
+.control-btn:hover {
+  background: #e2e8f0;
+}
+
+.end-call {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.fab-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+.fab-controls button {
+  background: #667eea;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-size: 1.5rem;
+}
+
+.theme-toggle {
+  margin-left: 10px;
+  cursor: pointer;
+  background: #ddd;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.dark-theme {
+  background: #2d3748;
+  color: #e2e8f0;
+}
+
+.dark-theme .header,
+.dark-theme .users-panel,
+.dark-theme .video-panel {
+  background: #4a5568;
+  color: white;
+}
+
+.hidden { display: none; }
+
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-info {
+    justify-content: center;
+  }
+
+  .header {
+    text-align: center;
+  }
+
+  .fab-controls button {
+    padding: 12px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-label {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+
+  .control-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .fab-controls button {
+    padding: 10px;
+    font-size: 1rem;
+  }
+}

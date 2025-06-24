@@ -19,6 +19,10 @@ let isVideoOff = false;
 let currentUserName = '';
 let connectionStatus = 'disconnected';
 
+// Mobile detection
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
 // Connection status display
 function updateConnectionStatus(status, details = '') {
   connectionStatus = status;
@@ -30,9 +34,83 @@ function updateConnectionStatus(status, details = '') {
   console.log(`Connection status: ${status} ${details}`);
 }
 
+// Handle orientation changes
+function handleOrientationChange() {
+  const videoContainer = document.getElementById('videoContainer');
+  if (videoContainer && !videoContainer.classList.contains('hidden')) {
+    // Force video container to recalculate layout
+    setTimeout(() => {
+      const videos = document.querySelectorAll('.video-wrapper video');
+      videos.forEach(video => {
+        if (video.srcObject) {
+          video.style.objectFit = 'cover';
+        }
+      });
+    }, 100);
+  }
+}
+
+// Add touch event handlers for mobile
+function addMobileEnhancements() {
+  if (isTouchDevice) {
+    // Add touch feedback to buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+      });
+      
+      button.addEventListener('touchend', function() {
+        this.style.transform = '';
+      });
+    });
+
+    // Prevent zoom on double tap for video elements
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+      video.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) {
+          e.preventDefault();
+        }
+      });
+    });
+
+    // Add swipe gesture for video controls (optional)
+    let startX = 0;
+    let startY = 0;
+    
+    document.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+
+    document.addEventListener('touchend', function(e) {
+      if (!startX || !startY) return;
+      
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      
+      const diffX = startX - endX;
+      const diffY = startY - endY;
+      
+      // Swipe up to show/hide controls
+      if (Math.abs(diffY) > Math.abs(diffX) && diffY > 50) {
+        const callControls = document.querySelector('.call-controls');
+        if (callControls) {
+          callControls.style.opacity = callControls.style.opacity === '0' ? '1' : '0';
+        }
+      }
+      
+      startX = 0;
+      startY = 0;
+    });
+  }
+}
+
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM loaded, initializing app...');
+  
   // Add enter key support for name input
   document.getElementById('nameInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
@@ -48,6 +126,30 @@ document.addEventListener('DOMContentLoaded', () => {
     statusDiv.className = 'connection-status';
     statusDiv.textContent = 'Connection: disconnected';
     mainScreen.insertBefore(statusDiv, mainScreen.firstChild);
+  }
+  
+  // Add mobile enhancements
+  addMobileEnhancements();
+  
+  // Add orientation change listener
+  window.addEventListener('orientationchange', handleOrientationChange);
+  window.addEventListener('resize', handleOrientationChange);
+  
+  // Add viewport meta tag for better mobile experience
+  if (!document.querySelector('meta[name="viewport"]')) {
+    const viewport = document.createElement('meta');
+    viewport.name = 'viewport';
+    viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    document.head.appendChild(viewport);
+  }
+  
+  // Add mobile-specific CSS class
+  if (isMobile) {
+    document.body.classList.add('mobile-device');
+  }
+  
+  if (isTouchDevice) {
+    document.body.classList.add('touch-device');
   }
 });
 
@@ -87,7 +189,7 @@ async function registerUser() {
   document.getElementById('currentUserName').textContent = `Welcome, ${name}`;
 
   // Add debug button
-  addDebugButton();
+  // addDebugButton();
 
   // Register with server
   socket.emit('register-user', name);
@@ -673,15 +775,15 @@ function logConnectionDebug() {
 }
 
 // Add debug button to UI
-function addDebugButton() {
-  const header = document.querySelector('.header');
-  if (header && !document.getElementById('debugButton')) {
-    const debugBtn = document.createElement('button');
-    debugBtn.id = 'debugButton';
-    debugBtn.className = 'btn-secondary';
-    debugBtn.textContent = 'Debug Info';
-    debugBtn.onclick = logConnectionDebug;
-    debugBtn.style.marginLeft = '10px';
-    header.appendChild(debugBtn);
-  }
-} 
+// function addDebugButton() {
+//   const header = document.querySelector('.header');
+//   if (header && !document.getElementById('debugButton')) {
+//     const debugBtn = document.createElement('button');
+//     debugBtn.id = 'debugButton';
+//     debugBtn.className = 'btn-secondary';
+//     debugBtn.textContent = 'Debug Info';
+//     debugBtn.onclick = logConnectionDebug;
+//     debugBtn.style.marginLeft = '10px';
+//     header.appendChild(debugBtn);
+//   }
+// } 
