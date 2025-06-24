@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Call Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .log {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Call App Test</h1>
+    
+    <div class="test-section">
+        <h3>Instructions:</h3>
+        <ol>
+            <li>Open <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> in two different browser windows/tabs</li>
+            <li>Enter different names for each window (e.g., "User1" and "User2")</li>
+            <li>Click "Start" in both windows</li>
+            <li>Allow camera and microphone permissions when prompted</li>
+            <li>In one window, click the "Call" button next to the other user's name</li>
+            <li>Accept the call in the other window</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h3>Common Issues:</h3>
+        <ul>
+            <li><strong>Call button not working:</strong> Check browser console for errors</li>
+            <li><strong>No users showing:</strong> Make sure both windows are connected</li>
+            <li><strong>Camera not working:</strong> Check browser permissions</li>
+            <li><strong>Connection issues:</strong> Check if server is running on port 3000</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h3>Server Status:</h3>
+        <p>Server should be running on port 3000</p>
+        <p>Check terminal for server logs</p>
+    </div>
+
+    <div class="test-section">
+        <h3>Browser Console:</h3>
+        <p>Open browser developer tools (F12) and check the Console tab for any error messages.</p>
+        <p>Look for messages like:</p>
+        <ul>
+            <li>"Connected to server with ID: ..."</li>
+            <li>"User registration: ..."</li>
+            <li>"Received user list: ..."</li>
+            <li>"startCall called with userId: ..."</li>
+        </ul>
+    </div>
+
+    <script>
+        // Test if server is reachable
+        fetch('http://localhost:3000')
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Server is running and reachable');
+                } else {
+                    console.log('❌ Server responded with error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.log('❌ Cannot connect to server:', error.message);
+            });
+    </script>
+</body>
+</html> 
