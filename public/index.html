@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Call App</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div id="nameForm">
+      <h2>Enter Your Name</h2>
+      <input type="text" id="nameInput" placeholder="Your name" required>
+      <button onclick="registerUser()">Start</button>
+    </div>
+
+    <div id="mainContent" class="hidden">
+      <h2>Online Users</h2>
+      <ul id="userList"></ul>
+
+      <div id="videoContainer">
+        <video id="remoteVideo" autoplay playsinline></video>
+        <video id="localVideo" autoplay muted playsinline onclick="swapVideos()"></video>
+        <div class="call-controls">
+          <button onclick="toggleMute()" id="muteButton">🔊</button>
+          <button onclick="toggleVideo()" id="videoButton">📹</button>
+          <button onclick="endCall()" class="end-call">❌</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>
